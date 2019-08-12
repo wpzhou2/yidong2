@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/userManage.css}">
+    <link rel="stylesheet" th:href="@{/css/left.css}">
+
+    <style>
+        td{
+            word-break:break-all;
+            word-wrap:break-word;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="whole" id="user">
+        <div class="left">
+            <div class="header">系统管理</div>
+            <div class="nav">
+                <ul>
+                    <li class="list">
+                        <h2><a href="#" class="a-header">用户管理</a></h2>
+                        <div class="hide">
+                            <h5><a href="#" class="a-detail">组织架构管理</a></h5>
+                            <h5><a href="#" class="a-detail">人员管理</a></h5>
+                            <h5><a href="#" class="a-detail">功能权限管理</a></h5>
+                            <h5><a href="#" class="a-detail">数据权限管理</a></h5>
+                        </div>
+                    </li>
+                    <li class="list">
+                        <h2><a href="#" class="a-header">用户管理</a></h2>
+                        <div class="hide">
+                            <h5><a href="#" class="a-detail">组织架构管理</a></h5>
+                            <h5><a href="#" class="a-detail">人员管理</a></h5>
+                            <h5><a href="#" class="a-detail">功能权限管理</a></h5>
+                            <h5><a href="#" class="a-detail">数据权限管理</a></h5>
+                        </div>
+                    </li>
+                    <li class="list">
+                        <h2><a href="#" class="a-header">用户管理</a></h2>
+                        <div class="hide">
+                            <h5><a href="#" class="a-detail">组织架构管理</a></h5>
+                            <h5><a href="#" class="a-detail">人员管理</a></h5>
+                            <h5><a href="#" class="a-detail">功能权限管理</a></h5>
+                            <h5><a href="#" class="a-detail">数据权限管理</a></h5>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+
+        <div class="right">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">用户管理</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
+
+            <div class="form-inline" style="margin-top: 20px;margin-left: 40px">
+                <div class="form-group">
+                    <span class="control-label">用户账号</span>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="username" placeholder="输入用户账号">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="control-label">用户姓名</span>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="nickname" placeholder="输入用户姓名">
+                    </div>
+                </div>
+
+                <button id="searchUser" class="btn btn-primary" style="margin-left: 40px">查询</button>
+                <button id="addUser" class="btn btn-primary" style="margin-left: 17px" data-toggle="modal" data-target="#addUserModal">增加用户</button>
+            </div>
+
+
+            <div style="margin:13px">
+                <table class="table" style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width:10%">账号</th>
+                            <th scope="col" style="width:8%">姓名</th>
+                            <th scope="col" style="width:6%">性别</th>
+                            <th scope="col" style="width:11%">部门</th>
+                            <th scope="col" style="width:11%">职位</th>
+                            <th scope="col" style="width:12%">手机号码</th>
+                            <th scope="col" style="width:18%">电子邮箱</th>
+                            <th scope="col" style="width:12%">角色</th>
+                            <th scope="col" style="width:6%">状态</th>
+                            <th scope="col" style="width:10%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userListTable">
+
+                    </tbody>
+            </table>
+            </div>
+
+            <div class="paging">
+                <nav aria-label="...">
+                    <ul class="pagination" id="pagination">
+                        <!--<li class="page-item">-->
+                            <!--<span class="page-link">前一页</span>-->
+                        <!--</li>-->
+                        <!--<li class="page-item"><a class="page-link" href="#">1</a></li>-->
+                        <!--<li class="page-item active">-->
+                              <!--<span class="page-link">-->
+                                <!--2-->
+                                <!--<span class="sr-only">(current)</span>-->
+                              <!--</span>-->
+                        <!--</li>-->
+                        <!--<li class="page-item"><a class="page-link" href="#">3</a></li>-->
+                        <!--<li class="page-item">-->
+                            <!--<a class="page-link" href="#">下一页</a>-->
+                        <!--</li>-->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!--删除用户确认框-->
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="" style="margin: 30px auto">确定删除该用户吗？</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="confirmDeleteUser(this)">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑用户信息Modal -->
+    <div class="modal fade" id="editUserInfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">编辑用户信息</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="user-info">
+                        <div class="info">
+                            <!--<div style="font-size: larger;font-weight: bolder; margin-bottom: 20px">个人信息</div>-->
+
+                            <div>
+                                <div>
+                                    <div style="display: inline-block;;width: 250px">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>账号</span></div>
+                                            <input id="editInfoUsername" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+
+                                    <div style="display: inline-block;width:40px;"></div>
+
+                                    <div style="display: inline-block;">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>姓名</span></div>
+                                            <input id="editInfoNickname" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div>
+                                    <div style="display: inline-block;;width: 250px">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>手机号码</span></div>
+                                            <input id="editInfoPhone" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+
+                                    <div style="display: inline-block;width:40px;"></div>
+
+                                    <div style="display: inline-block;">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>邮箱</span></div>
+                                            <input id="editInfoEmail" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div>
+                                    <div style="display: inline-block;;width: 250px">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>组织</span></div>
+                                            <input id="editInfoGroupId" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+
+                                    <div style="display: inline-block;width:40px;"></div>
+
+                                    <div style="display: inline-block;">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>职位</span></div>
+                                            <input id="editInfoPosition" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div>
+                                    <div style="display: inline-block;width: 250px">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"  style="display: block;"><span>账号状态</span></div>
+                                            <div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="active" id="active" value="active">
+                                                    <label class="form-check-label" for="active" style="font-size: smaller;">
+                                                        正常
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="active" id="inactive" value="inactive">
+                                                    <label class="form-check-label" for="inactive" style="font-size: smaller;">
+                                                        禁号
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div style="display: inline-block;width:40px;"></div>
+
+                                    <div style="display: inline-block;">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText" style="display: block;"><span>性别</span></div>
+                                            <div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="sex" id="male" value="male">
+                                                    <label class="form-check-label" for="male" style="font-size: smaller;">
+                                                        男
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="sex" id="female" value="female">
+                                                    <label class="form-check-label" for="female" style="font-size: smaller;">
+                                                        女
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div style="display: inline-block;">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>角色列表</span></div>
+                                            <input id="editInfoRole" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="height: 30px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="editInfoSave()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增用户信息Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserModalLabel">增加用户</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="user-info">
+                        <div class="info">
+                            <!--<div style="font-size: larger;font-weight: bolder; margin-bottom: 20px">个人信息</div>-->
+
+                            <div>
+                                <div>
+                                    <div style="display: inline-block;;width: 250px">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>账号</span></div>
+                                            <input id="addUsername" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+
+                                    <div style="display: inline-block;width:40px;"></div>
+
+                                    <div style="display: inline-block;">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>姓名</span></div>
+                                            <input id="addNickname" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div>
+                                    <div style="display: inline-block;;width: 250px">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>手机号码</span></div>
+                                            <input id="addPhone" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+
+                                    <div style="display: inline-block;width:40px;"></div>
+
+                                    <div style="display: inline-block;">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>邮箱</span></div>
+                                            <input id="addEmail" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div>
+                                    <div style="display: inline-block;;width: 250px">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>组织</span></div>
+                                            <input id="addGroupId" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+
+                                    <div style="display: inline-block;width:40px;"></div>
+
+                                    <div style="display: inline-block;">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>职位</span></div>
+                                            <input id="addPosition" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div>
+                                    <div style="display: inline-block;width: 250px">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"  style="display: block;"><span>账号状态</span></div>
+                                            <div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="addActive" id="addActive" value="active">
+                                                    <label class="form-check-label" for="addActive" style="font-size: smaller;">
+                                                        正常
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="addActive" id="addInactive" value="inactive">
+                                                    <label class="form-check-label" for="addInactive" style="font-size: smaller;">
+                                                        禁号
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div style="display: inline-block;width:40px;"></div>
+
+                                    <div style="display: inline-block;">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText" style="display: block;"><span>性别</span></div>
+                                            <div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="addSex" id="addMale" value="male">
+                                                    <label class="form-check-label" for="addMale" style="font-size: smaller;">
+                                                        男
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="addSex" id="addFemale" value="female">
+                                                    <label class="form-check-label" for="addFemale" style="font-size: smaller;">
+                                                        女
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div style="display: inline-block;">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>角色列表</span></div>
+                                            <input id="addRole" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+
+                                    <div style="display: inline-block;width:40px;"></div>
+
+                                    <div style="display: inline-block;">
+                                        <div class="editInfoBlock">
+                                            <div class="editInfoText"><span>密码</span></div>
+                                            <input id="addPassword" type="text" class="form-control" style="height:33px;width: 250px;font-size: smaller;">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div style="height: 30px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="addUserAndSave()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看用户信息Modal -->
+    <div class="modal fade" id="showUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="showUserModalLabel">用户信息</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="user-info" style="margin:30px auto">
+                        <div class="infos">
+                            <div class="info">
+
+                                <img id="userImg" height="45" width="45" style="border-radius: 50%;margin-bottom: 30px "
+                                     src=''>
+                                <span id="imgUsername" style="font-size: larger;font-weight: bolder;margin-left: 10px">周敏学</span>
+                                </img>
+
+                                <div>
+                                    <div style="display: inline-block;width:50%">
+                                        <div class="detail">账号：<span id="showUsername">Gause</span></div>
+                                        <div class="detail">最新登录时间：<span id="showLogDate">2018年03月28日 17:41</span></div>
+                                    </div>
+
+                                    <div style="display: inline-block;">
+                                        <div class="detail">姓名：<span id="showNickname">周敏学</span></div>
+                                        <div class="detail">性别：<span id="showSex">男</span></div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div style="border: #DCDCDC solid thin;margin: 30px 0"></div>
+
+                            <div class="account-info">
+                                <div style="font-size: larger;font-weight: bolder; margin-bottom: 20px">个人信息</div>
+                                <div>
+                                    <div style="display: inline-block;width:50%">
+                                        <div class="detail">账号状态：<span id="showActive">正常</span></div>
+                                        <div class="detail">组织：<span id="showGroupId">产品开发</span></div>
+                                        <div class="detail">职位：<span id="showPosition">产品开发</span></div>
+                                    </div>
+
+                                    <div style="display: inline-block;">
+                                        <div class="detail">手机号码：<span id="showPhone">13760426334</span></div>
+                                        <div class="detail">邮箱：<span id="showEmail">2647131486@qq.com</span></div>
+                                        <div class="detail">角色列表：<span id="showRole">ROLE_ADMIN,ROLE_USER</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+<script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.js}"></script>
+<script type="text/javascript" th:src="@{/js/left.js}"></script>
+</html>
